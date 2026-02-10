@@ -1,0 +1,25 @@
+title: Excessive Access to Sensitive Information Repositories by Single User
+id: 4a6f7b3f-1a20-4c5e-a1d4-ec89b2c8e7b1
+status: experimental
+description: Detects abnormal volume/breadth of access to sensitive documentation repositories by a single user within a short time window.
+author: IR Use Case Repo
+date: 2026/02/10
+tags:
+  - attack.t1213
+  - attack.t1078
+logsource:
+  product: custom
+  service: docs_audit
+detection:
+  selection:
+    action:
+      - view
+      - download
+      - export
+    data_sensitivity:
+      - restricted
+      - crown_jewel
+  condition: selection | count(object_id) by user > 200 within 1h
+falsepositives:
+  - Large legitimate reviews (audit, release, migration) with prior approval
+level: high

@@ -1,0 +1,21 @@
+# Splunk SPL examples (adapt field names)
+
+## 1) Excessive sensitive doc downloads (T1213)
+index=docs_audit data_sensitivity IN ("restricted","crown_jewel") action IN ("download","export")
+| bucket _time span=1h
+| stats dc(object_id) as uniq_objects sum(bytes) as total_bytes values(space) as spaces by user _time
+| where uniq_objects > 200 OR total_bytes > 500000000
+
+## 2) Restricted repo clone/mirror (T1213.003)
+index=git_audit repo_sensitivity IN ("restricted","crown_jewel") action IN ("git_clone","git_clone_mirror","git_bundle_create")
+| stats count as ops sum(bytes_out) as bytes values(repo) as repos values(device) as devices by user
+| where ops > 3 OR bytes > 500000000
+
+## 3) Personal cloud exfil attempts (T1567.002)
+index=dlp destination_category="personal_cloud_storage" data_sensitivity IN ("restricted","crown_jewel")
+| stats count values(destination) values(file_name) sum(file_size) as bytes by user action
+
+## 4) Archive then upload correlation (T1560 + T1567.002)
+( index=edr process_name IN ("zip","7z","tar") file_extension IN (".zip",".7z",".tar") ) OR
+( index=proxy destination_category="cloud_storage" http_method IN ("POST","PUT") bytes_out>100000000 )
+| sort 0 user device _time

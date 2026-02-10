@@ -1,0 +1,24 @@
+title: DLP Policy Hit for Upload to Personal Cloud Storage
+id: 8a62b4c0-4a6e-4e4f-9f56-c7e3f0d6b6d2
+status: experimental
+description: Detects attempts to upload restricted content to personal cloud storage services.
+author: IR Use Case Repo
+date: 2026/02/10
+tags:
+  - attack.t1567.002
+logsource:
+  product: custom
+  service: dlp
+detection:
+  selection:
+    action:
+      - upload_allowed
+      - upload_blocked
+    destination_category: personal_cloud_storage
+    data_sensitivity:
+      - restricted
+      - crown_jewel
+  condition: selection
+falsepositives:
+  - Misclassification or test files (should be rare)
+level: critical

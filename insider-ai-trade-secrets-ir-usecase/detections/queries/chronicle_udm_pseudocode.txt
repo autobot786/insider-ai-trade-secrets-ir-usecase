@@ -1,0 +1,12 @@
+# Chronicle / UDM-style pseudocode (adapt to your UDM mapping)
+
+## Restricted repo clone
+metadata.event_type = "GIT_CLONE"
+security_result.rule_name = "restricted_repo_clone"
+target.resource.attribute.labels["sensitivity"] in ("restricted","crown_jewel")
+
+## Exfil to cloud storage
+metadata.event_type = "NETWORK_HTTP"
+network.http.method in ("POST","PUT")
+network.destination.domain in /cloud-storage-domains/
+principal.user.userid = $user

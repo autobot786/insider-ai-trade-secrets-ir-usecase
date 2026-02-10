@@ -1,0 +1,37 @@
+scenario:
+  name: "Insider theft of AI supercomputing IP"
+  org: "Orchid AI Labs (fictional)"
+  version: "1.0"
+  personas:
+    engineer_a:
+      role: "Senior Systems Engineer (AI Infrastructure)"
+      access: ["code-repo:ai-orchestrator", "docs:accelerator-arch", "storage:build-artifacts"]
+      normal_hours: "09:00-18:00 local"
+      devices: ["corp-laptop-14", "corp-workstation-7"]
+  crown_jewel_assets:
+    - "Accelerator architecture design documents (TPU/GPU)"
+    - "Cluster orchestration platform design & source code"
+    - "High-performance networking firmware/configs"
+  assumed_controls:
+    - "SSO + MFA"
+    - "Repo audit logging"
+    - "DLP monitoring for external sharing and uploads"
+    - "Proxy logs for egress traffic"
+    - "EDR telemetry on endpoints"
+  timeline:
+    - t: "D-30"
+      event: "Engineer A begins broader-than-normal access to design docs and code repos."
+    - t: "D-21"
+      event: "Bulk repo clones and large exports occur outside normal hours."
+    - t: "D-14"
+      event: "DLP alerts for attempted upload of sensitive content to personal cloud storage."
+    - t: "D-7"
+      event: "Identity logs show inconsistent geo patterns; VPN usage spikes."
+    - t: "D-0"
+      event: "SOC escalates to IR for suspected insider exfiltration."
+success_criteria:
+  - "Contain within 2 hours of confirmed exfil attempt"
+  - "Scope established: repos, objects, timestamps, data volume"
+  - "Evidence preserved with chain-of-custody"
+  - "Executive brief delivered within 24 hours"
+  - "Control improvements tracked to completion"

@@ -1,0 +1,26 @@
+title: Unusual Git Clone or Mirror of Restricted Repository
+id: 2cf1df54-66bb-4b9b-b0f1-3c513d4b2212
+status: experimental
+description: Detects git clone/mirror actions against restricted repositories, especially outside business hours or from new devices.
+author: IR Use Case Repo
+date: 2026/02/10
+tags:
+  - attack.t1213.003
+  - attack.t1074.001
+logsource:
+  product: custom
+  service: git_audit
+detection:
+  selection:
+    action:
+      - git_clone
+      - git_clone_mirror
+      - git_bundle_create
+    repo_sensitivity:
+      - restricted
+      - crown_jewel
+  timeframe: 1h
+  condition: selection and (count() by user > 3 or bytes_out > 500000000)
+falsepositives:
+  - Approved release mirroring or backup jobs
+level: high

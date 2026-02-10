@@ -1,0 +1,12 @@
+// Microsoft Sentinel / KQL examples (adapt tables and fields)
+
+// 1) Unusual breadth of sensitive document access (T1213)
+DocsAudit
+| where DataSensitivity in ("restricted","crown_jewel") and Action in ("download","export")
+| summarize uniqObjects=dcount(ObjectId), totalBytes=sum(Bytes), spaces=make_set(Space, 20) by User, bin(TimeGenerated, 1h)
+| where uniqObjects > 200 or totalBytes > 500000000
+
+// 2) Personal cloud upload with restricted data (T1567.002)
+DlpEvents
+| where DestinationCategory == "personal_cloud_storage" and DataSensitivity in ("restricted","crown_jewel")
+| summarize count(), totalBytes=sum(FileSize), files=make_set(FileName, 20) by User, Action, Destination

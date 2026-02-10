@@ -1,0 +1,33 @@
+title: Archive Utility Followed by Cloud Upload (Potential Staging and Exfil)
+id: 5a7a7c79-0f6b-4f11-9d8b-4c7e8d8d2b2a
+status: experimental
+description: Detects local archiving (zip/tar/7z) followed by large uploads to cloud storage within a short window.
+author: IR Use Case Repo
+date: 2026/02/10
+tags:
+  - attack.t1560
+  - attack.t1567.002
+  - attack.t1074.001
+logsource:
+  product: custom
+  service: edr_and_proxy
+detection:
+  selection_archive:
+    process_name:
+      - zip
+      - 7z
+      - tar
+    file_extension:
+      - ".zip"
+      - ".7z"
+      - ".tar"
+  selection_upload:
+    proxy_action:
+      - upload
+      - put
+      - post
+    destination_category: cloud_storage
+  condition: selection_archive followed_by selection_upload within 2h by user, device
+falsepositives:
+  - Approved packaging of artifacts and uploads to sanctioned storage
+level: high
